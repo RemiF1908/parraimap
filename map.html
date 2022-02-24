@@ -35,7 +35,7 @@
 
     map = L.map('map', {
         preferCanvas: true
-    }).setView([51.505, -0.09], 13);;
+    }).setView([46.718950, 3.091010], 6);;
 
      tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
@@ -133,52 +133,53 @@ function init(callback){
         {
             switch (el["candidat"]) {
                 case 'MACRON Emmanuel':
-                    file = "macron.png";
+                    file = "images/macron.png";
                     break;
                 case 'HIDALGO Anne':
-                    file = "hidalgo.png";
+                    file = "images/hidalgo.png";
                     break;
                 case 'PÉCRESSE Valérie':
-                    file = "pecresse.png";
+                    file = "images/pecresse.png";
                     break;
                 case 'JADOT Yannick':
-                    file = "jadot.png";
+                    file = "images/jadot.png";
                     break;
                 case 'ARTHAUD Nathalie':
-                    file = "arthaud.png";
+                    file = "images/arthaud.png";
                     break;
                 case 'LE PEN Marine':
-                    file = "lepen.png";
+                    file = "images/lepen.png";
                     break;
                 case 'ZEMMOUR Éric':
-                    file = "zemmour.png";
+                    file = "images/zemmour.png";
                     break;
                 case 'POUTOU Philippe':
-                    file = "poutou.png";
+                    file = "images/poutou.png";
                     break;
                 case 'ROUSSEL Fabien':
-                    file = "roussel.png";
+                    file = "images/roussel.png";
                     break;
                 case 'MÉLENCHON Jean-Luc':
-                    file = "jlm.png";
+                    file = "images/jlm.png";
                     break;
                 case 'LASSALLE Jean':
-                    file = "lassale.png";
+                    file = "images/lassale.png";
                     break;
                 case 'DUPONT-AIGNAN Nicolas':
-                    file = "dupontaignan.png";
+                    file = "images/dupontaignan.png";
                     break;
                 default:
-                    file = "paul petit.png";
+                    file = "images/default.png";
             }
-            m.push(L.icon({
-                iconUrl: file,
-                iconSize: [50, 50],
-                iconAnchor: [25, 0]
-            }));
 
-            m.push(L.marker([el['y'], el['x']], {icon: m[m.length - 1]}).addTo(map))
-                //.bindPopup('<b>'+el['ville']+'<br>'+el["candidat"]+' </b>').openPopup());
+
+            L.circleMarker([el['y'], el['x']], {icon: L.icon({
+                    iconUrl: file,
+                    iconSize: [50, 50],
+                    iconAnchor: [25, 0]
+                })}).addTo(map)
+                //.bindTooltip("my tooltip text").openTooltip()
+                .bindPopup('<b>'+el['ville']+'<br>'+el["candidat"]+' </b>').openPopup();
 
             /*
          m.push(
