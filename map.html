@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Quick Start - Leaflet</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .leaflet-container {
+            height: 1920px;
+            width: 800px;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+
+<div id="map" style="width: 1920px; height: 800px;"></div>
+<p id="check"></p>
+<script>
+
+     map = L.map('map').setView([51.505, -0.09], 13);
+
+     tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        maxZoom: 18,
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+/*
+    var m=[];
+    var i = 0;
+    for (let pas = 0; pas < 20; pas++) {
+    m.push(L.icon({
+        iconUrl: 'paul petit.png',
+        iconSize: [50, 50],
+        iconAnchor: [25, 0]
+    }));
+    m.push(L.marker([i, 1.202762 ], {icon: m[m.length - 1]}).addTo(map)
+        .bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup());
+
+                i = i+1;
+    }
+
+*/
+
+
+
+
+
+function init(callback){
+
+
+    var getHttpRequest = function () {
+        var httpRequest = false;
+        if (window.XMLHttpRequest) { // Mozilla, Safari,...
+            httpRequest = new XMLHttpRequest();
+            if (httpRequest.overrideMimeType) {
+                httpRequest.overrideMimeType('text/json');
+            }
+        } else if (window.ActiveXObject)// IE
+        {
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {
+                }
+            }
+        }
+
+        if (!httpRequest) {
+            alert('Abandon :( Impossible de créer une instance XMLHTTP');
+            return false;
+        }
+        return httpRequest
+    }
+
+    var xhr = getHttpRequest()
+    console.log("d")
+    xhr.open('GET', 'fin.json', true) //recup du fichier gain
+    xhr.send()
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                document.getElementById('check').innerText = "";
+                req = xhr.responseText;
+                capitales = JSON.parse(req);
+                callback(capitales);
+
+
+            } else {
+                document.getElementById('check').innerText = 'Erreur 404';
+            }
+        }
+        if (xhr.readyState !== 4) {
+            document.getElementById('check').innerText = 'Chargement';
+        }
+    }
+}
+    function icc(el){
+        /*m.push(L.icon({
+            iconUrl: 'paul petit.png',
+            iconSize: [25, 25],
+            iconAnchor: [12.5, 0]
+        }));
+
+            m.push(L.marker([el['y'], el['x']], {icon: m[m.length - 1]}).addTo(map)
+                .bindPopup('<b>'+el['ville']+el["candidat"]+' </b><br />I am a popup.').openPopup());
+*/
+        if(parseInt(el["dpt"], 10) < 20)
+        {
+            m.push(L.icon({
+                iconUrl: 'paul petit.png',
+                iconSize: [25, 25],
+                iconAnchor: [12.5, 0]
+            }));
+
+            m.push(L.marker([el['y'], el['x']], {icon: m[m.length - 1]}).addTo(map)
+                .bindPopup('<b>'+el['ville']+'<br>'+el["candidat"]+' </b>').openPopup());
+        }
+
+
+    }
+    function icon(file){
+        console.log(file[1]['ville']);
+        m=[];
+        file.forEach(element => icc(element));
+    }
+     init(icon);
+</script>
+
+
+
+</body>
+</html>
