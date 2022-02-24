@@ -33,7 +33,9 @@
 <p id="check"></p>
 <script>
 
-     map = L.map('map').setView([51.505, -0.09], 13);
+    map = L.map('map', {
+        preferCanvas: true
+    }).setView([51.505, -0.09], 13);;
 
      tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
@@ -127,17 +129,66 @@ function init(callback){
             m.push(L.marker([el['y'], el['x']], {icon: m[m.length - 1]}).addTo(map)
                 .bindPopup('<b>'+el['ville']+el["candidat"]+' </b><br />I am a popup.').openPopup());
 */
-        if(parseInt(el["dpt"], 10) < 20)
+        if(parseInt(el["dpt"], 10) < 100)
         {
+            switch (el["candidat"]) {
+                case 'MACRON Emmanuel':
+                    file = "macron.png";
+                    break;
+                case 'HIDALGO Anne':
+                    file = "hidalgo.png";
+                    break;
+                case 'PÉCRESSE Valérie':
+                    file = "pecresse.png";
+                    break;
+                case 'JADOT Yannick':
+                    file = "jadot.png";
+                    break;
+                case 'ARTHAUD Nathalie':
+                    file = "arthaud.png";
+                    break;
+                case 'LE PEN Marine':
+                    file = "lepen.png";
+                    break;
+                case 'ZEMMOUR Éric':
+                    file = "zemmour.png";
+                    break;
+                case 'POUTOU Philippe':
+                    file = "poutou.png";
+                    break;
+                case 'ROUSSEL Fabien':
+                    file = "roussel.png";
+                    break;
+                case 'MÉLENCHON Jean-Luc':
+                    file = "jlm.png";
+                    break;
+                case 'LASSALLE Jean':
+                    file = "lassale.png";
+                    break;
+                case 'DUPONT-AIGNAN Nicolas':
+                    file = "dupontaignan.png";
+                    break;
+                default:
+                    file = "paul petit.png";
+            }
             m.push(L.icon({
-                iconUrl: 'paul petit.png',
-                iconSize: [25, 25],
-                iconAnchor: [12.5, 0]
+                iconUrl: file,
+                iconSize: [50, 50],
+                iconAnchor: [25, 0]
             }));
 
-            m.push(L.marker([el['y'], el['x']], {icon: m[m.length - 1]}).addTo(map)
-                .bindPopup('<b>'+el['ville']+'<br>'+el["candidat"]+' </b>').openPopup());
+            m.push(L.marker([el['y'], el['x']], {icon: m[m.length - 1]}).addTo(map))
+                //.bindPopup('<b>'+el['ville']+'<br>'+el["candidat"]+' </b>').openPopup());
+
+            /*
+         m.push(
+             circleMarker = L.circleMarker([el['y'], el['x']], {
+             color: '#3388ff'
+         }).addTo(map)
+
+         )  */
         }
+
 
 
     }
