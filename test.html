@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet debug page</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+
+    <script>
+        L_PREFER_CANVAS = true; // experimental
+    </script>
+</head>
+<body>
+<div id="map" style="width: 800px; height: 600px; border: 1px solid #ccc"></div>
+<button onclick="group.removeLayer(path)">Remove path</button>
+<button onclick="group.removeLayer(circle)">Remove circle</button>
+<button onclick="group.clearLayers()">Remove all layers</button>
+
+
+
+<script>
+    var cloudmadeUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+        cloudmade = new L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1
+        });
+
+    for (var i = 0, latlngs = [], len = 5; i < len; i++) {
+        latlngs.push(new L.LatLng(0, 2));
+    }
+    var path = new L.Polyline(latlngs);
+
+    var map = new L.Map('map', {layers: [cloudmade]});
+
+    var group = new L.LayerGroup();
+
+    map.fitBounds(new L.LatLngBounds(latlngs));
+
+    var circleLocation = new L.LatLng(51.508, -0.11),
+        circleOptions = {
+            color: 'red',
+            fillColor: 'yellow',
+            fillOpacity: 0.7
+        };
+
+
+        var circleMarker = new L.CircleMarker(circleLocation, {
+            icon: L.icon({
+                iconUrl: "macron.png",
+                iconSize: [50, 50],
+                iconAnchor: [25, 0]
+            })
+        });
+
+    group.addLayer(circleMarker);
+
+    circleMarker.bindPopup('I am a circle marker');
+
+    group.addLayer(path);
+    path.bindPopup('I am a polyline');
+
+    var p1 = latlngs[0],
+        p2 = latlngs[parseInt(len/4)],
+        p3 = latlngs[parseInt(len/3)],
+        p4 = latlngs[parseInt(len/2)],
+        p5 = latlngs[len - 1],
+        polygonPoints = [p1, p2, p3, p4, p5];
+
+    var h1 = new L.LatLng(p1.lat, p1.lng),
+        h2 = new L.LatLng(p2.lat, p2.lng),
+        h3 = new L.LatLng(p3.lat, p3.lng),
+        h4 = new L.LatLng(p4.lat, p4.lng),
+        h5 = new L.LatLng(p5.lat, p5.lng);
+
+    h1.lng += 20;
+    h2.lat -= 5;
+    h3.lat -= 5;
+    h4.lng -= 10;
+    h5.lng -= 8;
+    h5.lat += 10;
+
+    var holePoints = [h5, h4, h3, h2, h1];
+
+    var polygon = new L.Polygon([polygonPoints, holePoints], {
+        fillColor: "#333",
+        color: 'green'
+    });
+    group.addLayer(polygon);
+
+    polygon.bindPopup('I am a polygon');
+
+    map.addLayer(group);
+
+</script>
+
+</body>
+</html>
