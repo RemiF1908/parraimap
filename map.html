@@ -36,11 +36,11 @@
 <div id="map" style="width: 1920px; height: 800px;"></div>
 <p id="check"></p>
 <script>
-
+    groupe=[];
     map = L.map('map', {
         preferCanvas: true
     }).setView([46.718950, 3.091010], 6);
-    ;
+
 
     tiles = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
@@ -67,7 +67,6 @@
         }
 
     */
-
 
     function init(callback) {
 
@@ -99,7 +98,6 @@
         }
 
         var xhr = getHttpRequest()
-        console.log("d")
         xhr.open('GET', 'fin.json', true) //recup du fichier gain
         xhr.send()
 
@@ -170,18 +168,33 @@
                 case 'DUPONT-AIGNAN Nicolas':
                     file = "images/dupontaignan.png";
                     break;
+                case 'KAZIB Anasse':
+                    file = "images/kazib.png";
+                    break;
+                case 'TAUBIRA Christiane':
+                    file = "images/taubira.png";
+                    break;
+                case 'KOENIG Gaspard':
+                    file = "images/koenig.png";
+                    break;
+                case 'ASSELINEAU François':
+                    file = "images/asselineau.png";
+                    break;
                 default:
                     file = "images/default.png";
             }
 
 
-            L.marker([el['y'], el['x']], {
+            mark = L.marker([el['y'], el['x']], {
                 icon: L.icon({
                     iconUrl: file,
                     iconSize: [50, 50],
                     iconAnchor: [25, 0]
                 })
-            }).addTo(map)
+            }).addTo(map);
+            groupe.push(mark);
+
+
             //.bindTooltip("my tooltip text").openTooltip()
             //.bindPopup('<b>'+el['ville']+'<br>'+el["candidat"]+' </b>').openPopup();
 
@@ -204,6 +217,25 @@
     }
 
     init(icon);
+    console.log(groupe);
+
+    groupe.forEach(element => aa(element));
+
+
+    map.on('zoomend',function(e){
+        var currZoom = map.getZoom();
+
+        console.log("Clicked "+currZoom);
+        if(currZoom>8){
+            group.setIcon(group.options.icon.options.iconSize=[25,25]);
+        }
+    });
+    console.log(map.getZoom())
+
+    function aa(el){
+        aa = el.options.icon.options.iconSize=[2,2];
+        el.setIcon(L.icon(aa));
+    }
 </script>
 
 
